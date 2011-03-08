@@ -1,0 +1,11 @@
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\musicopy.exe
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\musicopy.pdb
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\musicopy.xml
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\musicopy.frmMain.resources
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\musicopy.Resources.resources
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\musicopy.exe
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\musicopy.xml
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\musicopy.pdb

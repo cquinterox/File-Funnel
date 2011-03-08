@@ -1,0 +1,16 @@
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\FileFunnel.exe.manifest
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\FileFunnel.application
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\FileFunnel.exe
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\FileFunnel.pdb
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\bin\Debug\FileFunnel.xml
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.frmMain.resources
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.Resources.resources
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.TrustInfo.xml
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.exe.manifest
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.application
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.exe
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.xml
+D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.pdb

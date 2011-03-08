@@ -1,0 +1,1 @@
+This utility's code is free to copy and use in any way. 

@@ -5,7 +5,7 @@ Public Class frmMain
     Dim intCopyCount As Integer 'Count of files copied
     Dim strExtension As String
 
-    Dim objWriter As New StreamWriter(Now.ToString("yyyy-MM-dd--hh-mm-ss") & "_log.txt") 'Log
+    Dim objWriter As StreamWriter
 
     Private Sub btnSource_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSource.Click
         fbdSource.ShowDialog()
@@ -17,19 +17,23 @@ Public Class frmMain
 
     Private Sub btnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopy.Click
         Try
-            Dim appThread As New Thread(New ThreadStart(AddressOf init)) 'For threading purposes. Tell the threading object which function. Must not include parameters : (
-
+            Dim appThread As New Thread(New ThreadStart(AddressOf startCopy)) 'For threading purposes. Tell the threading object which function. Must not include parameters : (
+            objWriter = New StreamWriter(Now.ToString("yyyy-MM-dd--hh-mm-ss") & ".log") 'Log 
+            intCopyCount = 0
             If (btnCopy.Text = "Copy") Then
                 If (inputsValid()) Then
                     enableControls(False)
                     appThread.Start() ' start threaded process!
+                    enableControls(True)
+                    'appThread.Abort()
                 Else
                     MsgBox("Please make sure the source, destination, and extension are set correctly.", MsgBoxStyle.Critical, "Parameters Missing")
                 End If
             ElseIf (btnCopy.Text = "Cancel") Then
                 enableControls(True)
                 appThread.Abort() ' stop the thread process. 
-                End
+                appThread = Nothing
+                'End
             End If
         Catch ex As Exception
             ' future error logging 
@@ -50,21 +54,20 @@ Public Class frmMain
         End Select
         Return True
     End Function
-    Public Function init()
-
+    Public Function startCopy()
         Dim dirSRC As New DirectoryInfo(fbdSource.SelectedPath) 'set source
         Dim dirDEST As New DirectoryInfo(fbdDestination.SelectedPath) 'set destination
         copyTargetFilesInDir(dirSRC, dirDEST, strExtension) 'copyTargetFilesInDir(source, destination, extension)
         objWriter.Close() 'stop logging when done
         MessageBox.Show("Done! [" & intCopyCount & "] files copied") ' Done message
-        End
+        'End
         Return True
     End Function
 
     Public Function inputsValid()
         'Set up before hand for ease of validation
-        Dim regEx As New System.Text.RegularExpressions.Regex("^\.\S+$")
-        strExtension = txtExtension.Text
+        Dim regEx As New System.Text.RegularExpressions.Regex("^\.\S+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        strExtension = txtExtension.Text.ToUpper()
 
         'Make sure selected paths are set and the extension is in extension format
         If Not (fbdSource.SelectedPath = String.Empty) And Not (fbdDestination.SelectedPath = String.Empty) And regEx.IsMatch(strExtension) Then
@@ -95,7 +98,7 @@ Public Class frmMain
             'Set the location for the new file by changing it's original path for the new path
             Dim newFile As New FileInfo(dest_dir.FullName & file.FullName.ToString.Replace(src_dir.FullName, ""))
             'Check to see the file on hand is the type we were looking for then copy, count, log
-            If (file.Exists And file.Extension = ext And Not newFile.Exists) Then ' extension with period and makes sure new copy does not exist
+            If (file.Exists And file.Extension.Equals(ext) And Not newFile.Exists) Then ' extension with period and makes sure new copy does not exist
                 System.IO.File.Copy(file.FullName, dest_dir.FullName & file.FullName.ToString.Replace(src_dir.FullName, ""))
                 intCopyCount += 1 'For file count
                 strTempString = file.FullName & " >> " & newFile.FullName 'For logging primarily

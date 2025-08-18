@@ -14,16 +14,3 @@ D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFun
 D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.exe
 D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.xml
 D:\Documents\Visual Studio 2010\Projects\musicopy\musicopy\obj\x86\Debug\FileFunnel.pdb
-C:\Users\cquin\Source\Repos\File-Funnel\bin\Debug\FileFunnel.exe.config
-C:\Users\cquin\Source\Repos\File-Funnel\bin\Debug\FileFunnel.exe
-C:\Users\cquin\Source\Repos\File-Funnel\bin\Debug\FileFunnel.pdb
-C:\Users\cquin\Source\Repos\File-Funnel\bin\Debug\FileFunnel.xml
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\File Funnel.vbproj.AssemblyReference.cache
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\FileFunnel.frmMain.resources
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\FileFunnel.Resources.resources
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\File Funnel.vbproj.GenerateResource.cache
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\File Funnel.vbproj.CoreCompileInputs.cache
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\FileFunnel.exe
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\FileFunnel.xml
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\FileFunnel.pdb
-C:\Users\cquin\Source\Repos\File-Funnel\obj\x86\Debug\FileFunnel.exe.config

@@ -63,14 +63,17 @@ Public Class frmMain
         Try
             Dim dirSRC As New DirectoryInfo(fbdSource.SelectedPath)
             Dim dirDEST As New DirectoryInfo(fbdDestination.SelectedPath)
-            
+
             ' First pass: count total files to enable progress reporting
-            countTargetFiles(dirSRC, strExtension)
+            If Not countTargetFiles(dirSRC, strExtension, bgWorker, e) Then
+                e.Cancel = True
+                Return
+            End If
             bgWorker.ReportProgress(0, "Counting files... Found " & intTotalFiles & " files to process")
-            
+
             ' Second pass: copy files with progress reporting
             copyTargetFilesInDir(dirSRC, dirDEST, strExtension, bgWorker, e)
-            
+
         Catch ex As Exception
             e.Result = "Error: " & ex.Message
         End Try
@@ -108,7 +111,7 @@ Public Class frmMain
     Public Function inputsValid()
         'Set up before hand for ease of validation
         Dim regEx As New System.Text.RegularExpressions.Regex("^\.\S+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-        strExtension = txtExtension.Text.ToUpper()
+        strExtension = txtExtension.Text
 
         'Make sure selected paths are set and the extension is in extension format
         If Not (fbdSource.SelectedPath = String.Empty) And Not (fbdDestination.SelectedPath = String.Empty) And regEx.IsMatch(strExtension) Then
@@ -117,20 +120,34 @@ Public Class frmMain
             Return False 'doesn't validate
         End If
     End Function
-    
-    Public Function countTargetFiles(ByVal src_dir As DirectoryInfo, ByVal ext As String)
+
+    Public Function countTargetFiles(ByVal src_dir As DirectoryInfo, ByVal ext As String, ByVal worker As BackgroundWorker, ByVal e As DoWorkEventArgs) As Boolean
         Try
+            ' Check for cancellation at start
+            If worker IsNot Nothing AndAlso worker.CancellationPending Then
+                If e IsNot Nothing Then e.Cancel = True
+                Return False
+            End If
+
             Dim strDir As String() = Directory.GetFileSystemEntries(src_dir.FullName)
             Dim strEntry As String
-            
+
             For Each strEntry In strDir
+                ' Check for cancellation in main loop
+                If worker IsNot Nothing AndAlso worker.CancellationPending Then
+                    If e IsNot Nothing Then e.Cancel = True
+                    Return False
+                End If
+
                 Dim dirInner As New DirectoryInfo(strEntry)
                 If (dirInner.Exists) Then
-                    countTargetFiles(dirInner, ext)
+                    If Not countTargetFiles(dirInner, ext, worker, e) Then
+                        Return False
+                    End If
                 End If
-                
+
                 Dim file As New FileInfo(strEntry)
-                If (file.Exists And file.Extension.Equals(ext)) Then
+                If (file.Exists And String.Equals(file.Extension, ext, StringComparison.OrdinalIgnoreCase)) Then
                     intTotalFiles += 1
                 End If
             Next
@@ -140,47 +157,59 @@ Public Class frmMain
         Return True
     End Function
 
-    Public Function copyTargetFilesInDir(ByVal src_dir As DirectoryInfo, ByVal dest_dir As DirectoryInfo, ByVal ext As String, ByVal worker As BackgroundWorker, ByVal e As DoWorkEventArgs)
+    Public Function copyTargetFilesInDir(ByVal src_dir As DirectoryInfo, ByVal dest_dir As DirectoryInfo, ByVal ext As String, ByVal worker As BackgroundWorker, ByVal e As DoWorkEventArgs) As Boolean
         Try
+            ' Check for cancellation at start
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Return False
+            End If
+
             Dim strDir As String() = Directory.GetFileSystemEntries(src_dir.FullName)
             Dim strEntry As String
             Dim strTempString As String
 
             For Each strEntry In strDir
-                ' Check for cancellation
+                ' Check for cancellation in main loop
                 If worker.CancellationPending Then
                     e.Cancel = True
                     Return False
                 End If
-                
+
                 Dim dirInner As New DirectoryInfo(strEntry)
                 If (dirInner.Exists) Then
                     If (chkKeepDirStruc.Checked) Then
                         Dim newDest As New DirectoryInfo(dest_dir.FullName & dirInner.FullName.ToString.Replace(src_dir.FullName, ""))
                         System.IO.Directory.CreateDirectory(newDest.FullName)
-                        copyTargetFilesInDir(dirInner, newDest, ext, worker, e)
+                        ' Check return value from recursive call
+                        If Not copyTargetFilesInDir(dirInner, newDest, ext, worker, e) Then
+                            Return False
+                        End If
                     Else
-                        copyTargetFilesInDir(dirInner, dest_dir, ext, worker, e)
+                        ' Check return value from recursive call
+                        If Not copyTargetFilesInDir(dirInner, dest_dir, ext, worker, e) Then
+                            Return False
+                        End If
                     End If
                 End If
-                
+
                 Dim file As New FileInfo(strEntry)
                 Dim newFile As New FileInfo(dest_dir.FullName & file.FullName.ToString.Replace(src_dir.FullName, ""))
-                
-                If (file.Exists And file.Extension.Equals(ext) And Not newFile.Exists) Then
+
+                If (file.Exists And String.Equals(file.Extension, ext, StringComparison.OrdinalIgnoreCase) And Not newFile.Exists) Then
                     ' Check for cancellation before copying
                     If worker.CancellationPending Then
                         e.Cancel = True
                         Return False
                     End If
-                    
+
                     System.IO.File.Copy(file.FullName, dest_dir.FullName & file.FullName.ToString.Replace(src_dir.FullName, ""))
                     intCopyCount += 1
-                    
+
                     ' Report progress
                     Dim progressPercent As Integer = CInt((intCopyCount / intTotalFiles) * 100)
                     worker.ReportProgress(progressPercent, "Copied " & intCopyCount & " of " & intTotalFiles & " files - " & file.Name)
-                    
+
                     ' Log the copy
                     strTempString = file.FullName & " >> " & newFile.FullName
                     objWriter.WriteLine(intCopyCount & ". " & strTempString)
@@ -191,6 +220,7 @@ Public Class frmMain
             ' Log error but continue processing
             objWriter.WriteLine("Error processing " & src_dir.FullName & ": " & ex.Message)
             objWriter.Flush()
+            Return False ' Return False on error to propagate cancellation
         End Try
         Return True
     End Function
